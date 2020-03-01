@@ -1,0 +1,8 @@
+{
+  "appId": "com.mmtm.app",
+  "appName": "mmtm",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "cordova": {}
+}
