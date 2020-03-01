@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import firebase from 'firebase';
+import { Plugins, DeviceInfo } from '@capacitor/core';
+
 
 Vue.use(Vuex);
 
@@ -22,6 +24,8 @@ export enum MUT {
   SET_CURRENT_NOTE = 'SET_CURRENT_NOTE',
   UPDATE_NOTE = 'UPDATE_NOTE',
   REMOVE_NOTE = 'REMOVE_NOTE',
+  SET_DEVICE = 'SET_DEVICE',
+  SET_SHOW_NOTES_LIST = 'SET_SHOW_NOTES_LIST',
 }
 
 export enum ACTIONS {
@@ -53,9 +57,12 @@ export interface Action {
 
 const store = new Vuex.Store({
   state: {
+    version: '0.0.1',
     currentUser: {} as any,
     notes: {} as NoteSet,
     currentNoteID: '' as string | null,
+    device: {} as DeviceInfo,
+    showNotesList: true,
   },
   getters: {
     noteSummaries(state) {
@@ -68,6 +75,12 @@ const store = new Vuex.Store({
   mutations: {
     [MUT.SET_CURRENT_USER](state, user) {
       Vue.set(state, 'currentUser', user);
+    },
+    [MUT.SET_DEVICE](state, device) {
+      Vue.set(state, 'device', device);
+    },
+    [MUT.SET_SHOW_NOTES_LIST](state, show) {
+      Vue.set(state, 'showNotesList', show);
     },
     [MUT.SET_NOTES](state, notes: Note[]) {
       // Key notes off of ID
@@ -176,6 +189,10 @@ firebase.auth().onAuthStateChanged((user) => {
     store.commit(MUT.SET_CURRENT_USER, user);
     store.dispatch(ACTIONS.FETCH_NOTES);
   }
+});
+
+Plugins.Device.getInfo().then((data) => {
+  store.commit(MUT.SET_DEVICE, data);
 });
 
 export default store;

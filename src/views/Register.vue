@@ -1,13 +1,19 @@
 <template>
-  <div class="register">
-    <form action="#" @submit.prevent="register">
-      <label for="email">Email</label>
-      <input type="email" v-model="email">
-      <label for="password">Password</label>
-      <input type="passowrd" v-model="password">
-      <button type="submit">Register</button>
-    </form>
-    <router-link :to="{ name: 'login' }">Log In</router-link>
+  <div class="wrapper">
+    <div class="register">
+      <form action="#" @submit.prevent="register">
+        <div class="form-item">
+          <label for="email">Email</label>
+          <input type="email" v-model="email">
+        </div>
+        <div class="form-item">
+          <label for="password">Password</label>
+          <input type="passowrd" v-model="password">
+        </div>
+        <button class="button" type="submit">Register</button>
+      </form>
+      <router-link :to="{ name: 'login' }">Log In</router-link>
+    </div>
   </div>
 </template>
 

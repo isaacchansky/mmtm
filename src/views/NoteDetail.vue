@@ -8,8 +8,8 @@
     <note-actions notes-context :actions="actions" @change="updateActions" />
     <editor-content class="note__content" :editor="editor" />
     <div class="note__management">
-      <button @click="deleteNote" class="color-warn">
-        <icon-trash class="color-warn" />
+      <button @click="deleteNote" class="color-warn button">
+        Delete <icon-trash />
       </button>
     </div>
   </div>
@@ -18,10 +18,13 @@
 <script>
 import Vue from 'vue';
 import { Editor, EditorContent } from 'tiptap';
+import { Plugins } from '@capacitor/core';
 import debounce from 'lodash/debounce';
 import { ACTIONS } from '../store';
 import NoteActions from '../components/NoteActions.vue';
 import IconTrash from '../components/IconTrash.vue';
+
+const { Modals } = Plugins;
 
 export default Vue.extend({
   name: 'NoteDetail',
@@ -85,9 +88,15 @@ export default Vue.extend({
     }, 500),
     async deleteNote() {
       this.frozen = true;
-      await this.$store.dispatch(ACTIONS.DELETE_NOTE, this.id);
-      this.frozen = false;
-      this.$router.replace({ name: 'notes' });
+      const confirmRet = await Modals.confirm({
+        title: 'Confirm',
+        message: `Delete ${this.note.title}?`,
+      });
+      if (confirmRet.value) {
+        await this.$store.dispatch(ACTIONS.DELETE_NOTE, this.id);
+        this.frozen = false;
+        this.$router.replace({ name: 'notes' });
+      }
     },
   },
   mounted() {
@@ -137,10 +146,7 @@ export default Vue.extend({
   color: var(--text-color-focus);
 }
 .note__management {
-  display: flex;
-  justify-content: flex-end;
-  position: sticky;
-  bottom: 0;
+  margin: 2rem 1rem;
   background-color: var(--background-color);
 }
 .note__content {

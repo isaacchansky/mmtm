@@ -1,8 +1,17 @@
 <template>
-  <div class="settings">
-    <div>{{ currentUser.email }}</div>
-    <br>
-    <button class="button" @click="logout">Logout</button>
+  <div class="wrapper">
+    <div class="settings">
+      <div>{{ currentUser.email }}</div>
+      <br>
+      <div>v.{{ version }}</div>
+      <br>
+      <button class="button" @click="logout">Logout</button>
+      <br>
+      <strong>DEVICE:</strong>
+      <pre>
+        {{ deviceInfo }}
+      </pre>
+    </div>
   </div>
 </template>
 
@@ -19,6 +28,12 @@ export default Vue.extend({
     };
   },
   computed: {
+    version() {
+      return this.$store.state.version;
+    },
+    deviceInfo() {
+      return this.$store.state.device;
+    },
     currentUser() {
       return this.$store.state.currentUser;
     },
@@ -34,13 +49,10 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.settings {
-  margin: 40px auto;
-  max-width: 400px;
-  padding: 16px;
-}
 pre {
   max-height: 400px;
+  width: 100%;
+  display: block;
   overflow: auto;
 }
 </style>

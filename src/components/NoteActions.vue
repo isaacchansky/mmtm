@@ -177,16 +177,18 @@ export default Vue.extend({
 .actions__item-label {
   border: none;
   font-size: 16px;
-  padding: 0.15em 0.5em;
+  padding: 2px 2px;
   background-color: inherit;
   display: inline-flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row-reverse;
-  color: var(--text-color);
+  color: currentColor;
 }
 .actions__item-label:focus {
   outline: none;
-  color: var(--text-color-focus);
   background-color: var(--background-focus);
+  border-radius: 14px;
 }
 .action__icon {
   display: inline-block;
@@ -222,6 +224,12 @@ export default Vue.extend({
   border-radius: 50%;
   border: 1px solid var(--text-color-mid);
 }
+.actions__item--started {
+  color: var(--color-green);
+}
+.actions__item--started .actions__item-label {
+  font-weight: 500;
+}
 .actions__item--started .action__icon:after {
   border: none;
   background-color: var(--text-color);
@@ -229,7 +237,9 @@ export default Vue.extend({
   height: 1px;
 }
 .actions__item--done {
+  color: var(--color-gold);
   opacity: 0.5;
+  text-decoration: line-through;
 }
 .actions__item--done .action__icon:after {
   border: none;
@@ -248,7 +258,8 @@ export default Vue.extend({
 }
 .action__new-input {
   border: none;
-  border-bottom: 1px solid var(--text-color-mid);
+  border-radius: 0;
+  border-bottom: 1px solid var(--text-color-light);
   font-size: 16px;
 }
 .action__new-input:focus {

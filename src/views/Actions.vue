@@ -1,11 +1,17 @@
 <template>
-  <div class="aggregate-actions">
-    <template v-for="(n, id) in notes">
-      <div class="note-actions" v-if="n.actions && n.actions.length" :key="id">
-        <label>{{ n.title }}</label>
-        <note-actions :actions="n.actions" @change="(actions) => updateNote(n, actions)" />
-      </div>
-    </template>
+  <div class="wrapper">
+    <div class="aggregate-actions">
+      <template v-for="(n, id) in notes">
+        <div class="note-actions" v-if="n.actions && n.actions.length" :key="id">
+          <label>
+            <router-link :to="{ name: 'note.detail', params: { id: n.id }}">
+              {{ n.title }}
+            </router-link>
+          </label>
+          <note-actions :actions="n.actions" @change="(actions) => updateNote(n, actions)" />
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -41,9 +47,7 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .aggregate-actions {
-  margin: 10vh auto auto;
-  width: 100%;
-  max-width: 400px;
+  padding: 0 !important;
 }
 .note-actions {
   margin-bottom: 20px;

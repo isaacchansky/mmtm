@@ -7,7 +7,7 @@
       <li v-for="(n, id) in notes" :key="id">
         <router-link class="notes__list-item" :to="{ name: 'note.detail', params: { id: n.id }}">
           <div class="title-label"> {{ n.title }} </div>
-          <div class="title-actions" v-if="n.actions.length">
+          <div class="title-actions color-gold" v-if="n.actions.length">
             <icon-actions />
             {{ n.actions.filter(a => a.state !== 'done').length }}
           </div>
@@ -31,7 +31,7 @@
       </div>
     </div>
     <button class="notes-toggle" @click="noteListOverlay = !noteListOverlay">
-      <icon-sidebar />
+      All Notes
     </button>
   </div>
 </template>
@@ -41,7 +41,6 @@ import Vue from 'vue';
 import { ACTIONS } from '../store';
 import IconActions from '../components/IconActions.vue';
 import IconAdd from '../components/IconAdd.vue';
-import IconSidebar from '../components/IconSidebar.vue';
 
 import QUOTES from '../quotes';
 
@@ -50,7 +49,6 @@ export default Vue.extend({
   components: {
     IconActions,
     IconAdd,
-    IconSidebar,
   },
   data() {
     return {
@@ -110,6 +108,12 @@ export default Vue.extend({
   flex-direction: column;
   transition: all 250ms ease-in-out;
 }
+@media screen and (max-width: 768px) {
+  .notes__list {
+    box-shadow: 0px 2px 8px 1px rgba(0,0,0,0.15), 0px 0px 16px 1px rgba(0,0,0,0.05);
+  }
+}
+
 .notes__list-item {
   padding: 1em 1.5em;
   display: block;
@@ -160,8 +164,18 @@ export default Vue.extend({
   position: fixed;
   bottom: 0;
   left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
   display: none;
   padding: 16px;
+  color: var(--text-color-mid);
+  text-transform: uppercase;
+  background: var(--background-color);
+  border-top: 1px solid var(--text-color-light);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
 }
 .notes-toggle:focus {
   outline: none;
@@ -169,7 +183,7 @@ export default Vue.extend({
 
 @media screen and (max-width: 768px) {
   .notes-toggle {
-    display: flex;
+    display: block;
   }
   .notes__list {
     position: fixed;
