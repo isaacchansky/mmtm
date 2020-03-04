@@ -1,5 +1,5 @@
 <template>
-  <div class="actions" :class="{ collapsed }">
+  <div class="actions" :class="{ collapsed, 'focused-view': !notesContext }">
     <label  v-if="notesContext" class="actions__title">
       <span class="actions__title--wide">Actions</span>
       <span class="actions__title--narrow" @click="collapsed = !collapsed">
@@ -26,6 +26,7 @@
           <input class="action__new-input"
             type="text"
             v-model="newAction"
+            @blur="addAction(newAction)"
             @keyup.enter="addAction(newAction)" />
           <span class="action__icon"></span>
         </div>
@@ -174,6 +175,9 @@ export default Vue.extend({
 .actions__item {
   margin-bottom: 8px;
 }
+.focused-view .actions__item {
+  padding-left: 12px;
+}
 .actions__item-label {
   border: none;
   font-size: 16px;
@@ -184,6 +188,7 @@ export default Vue.extend({
   align-items: center;
   flex-direction: row-reverse;
   color: currentColor;
+  text-align: left;
 }
 .actions__item-label:focus {
   outline: none;
@@ -194,6 +199,8 @@ export default Vue.extend({
   display: inline-block;
   width: 16px;
   height: 16px;
+  min-width: 16px;
+  min-height: 16px;
   border: 1px solid var(--text-color-mid);
   border-radius: 50%;
   vertical-align: middle;

@@ -141,7 +141,7 @@ body {
   vertical-align: middle;
 }
 .nav-link-icon svg {
-  vertical-align: text-top;
+  vertical-align: text-bottom;
 }
 
 button {

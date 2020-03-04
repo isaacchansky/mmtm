@@ -6,6 +6,32 @@
       v-model="title"
       @keyup="updateNote" />
     <note-actions notes-context :actions="actions" @change="updateActions" />
+    <editor-menu-bubble
+      :editor="editor"
+      :keep-in-bounds="true"
+      v-slot="{ commands, isActive, menu }" >
+      <div
+        class="menububble"
+        :class="{ 'is-active': menu.isActive }"
+        :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
+      >
+        <button
+            class="menububble__button"
+            :class="{ 'is-active': isActive.bold() }"
+            @click="commands.bold"
+          >
+            <icon-bold />
+          </button>
+
+          <button
+            class="menububble__button"
+            :class="{ 'is-active': isActive.italic() }"
+            @click="commands.italic"
+          >
+            <icon-italic />
+          </button>
+      </div>
+    </editor-menu-bubble>
     <editor-content class="note__content" :editor="editor" />
     <div class="note__management">
       <button @click="deleteNote" class="color-warn button">
@@ -17,12 +43,30 @@
 
 <script>
 import Vue from 'vue';
-import { Editor, EditorContent } from 'tiptap';
+import { Editor, EditorContent, EditorMenuBubble } from 'tiptap';
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  History,
+} from 'tiptap-extensions';
 import { Plugins } from '@capacitor/core';
 import debounce from 'lodash/debounce';
 import { ACTIONS } from '../store';
 import NoteActions from '../components/NoteActions.vue';
 import IconTrash from '../components/IconTrash.vue';
+import IconBold from '../components/IconBold.vue';
+import IconItalic from '../components/IconItalic.vue';
 
 const { Modals } = Plugins;
 
@@ -30,8 +74,11 @@ export default Vue.extend({
   name: 'NoteDetail',
   components: {
     EditorContent,
+    EditorMenuBubble,
     NoteActions,
     IconTrash,
+    IconBold,
+    IconItalic,
   },
   props: {
     id: {
@@ -104,6 +151,22 @@ export default Vue.extend({
       this.$refs.title.focus();
     }
     this.editor = new Editor({
+      extensions: [
+        new Blockquote(),
+        new BulletList(),
+        new CodeBlock(),
+        new HardBreak(),
+        new Heading({ levels: [1, 2, 3] }),
+        new ListItem(),
+        new OrderedList(),
+        new TodoItem(),
+        new TodoList(),
+        new Bold(),
+        new Code(),
+        new Italic(),
+        new Link(),
+        new History(),
+      ],
       onUpdate: debounce(({ getJSON }) => {
         this.content = getJSON();
         this.updateNote();
@@ -174,6 +237,35 @@ export default Vue.extend({
     height: 100%;
     z-index: 2;
     padding: 50px;
+  }
+}
+
+.menububble {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .menububble {
+    position: absolute;
+    display: flex;
+    z-index: 20;
+    background: var(--text-color-focus);
+    border-radius: 5px;
+    padding: .3rem;
+    margin-bottom: .5rem;
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .2s,visibility .2s;
+  }
+  .menububble svg {
+    color: var(--text-color-light);
+    width: 1em;
+    height: 1em;
+  }
+  .menububble.is-active {
+    opacity: 1;
+    visibility: visible;
   }
 }
 </style>

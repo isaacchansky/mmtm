@@ -1,6 +1,7 @@
 <template>
   <div class="notes"
     :class="{ 'notelist-overlay': noteListOverlay }"
+    v-touch:swipe.right="showNoteList"
     @keyup.alt.arrow-up="noteNav(-1)"
     @keyup.alt.arrow-down="noteNav(1)">
     <ul class="notes__list" @click="noteListOverlay = false">
@@ -66,6 +67,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    showNoteList() {
+      this.noteListOverlay = true;
+    },
     noteNav(change) {
       const ids = Object.keys(this.notes);
       const currIndex = ids.indexOf(this.$route.params.id);
