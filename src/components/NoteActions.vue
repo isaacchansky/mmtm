@@ -106,13 +106,17 @@ export default Vue.extend({
       this.update();
     },
     addAction(title) {
+      const action = title.trim();
+      this.newAction = '';
+      if (action.length === 0) {
+        return;
+      }
       this.internalActions.push({
-        title,
+        title: action,
         done: false,
         state: ACTION_STATE.TODO,
         createdAt: new Date(),
       });
-      this.newAction = '';
       this.update();
     },
     advanceAction(index, dir) {
@@ -130,7 +134,7 @@ export default Vue.extend({
       this.update();
     },
     update: debounce(function updateactions() {
-      this.$emit('change', this.internalActions);
+      this.$emit('change', [...this.internalActions]);
     }, 500),
   },
 });

@@ -28,4 +28,5 @@ export default [
   'Busy is a decision.',
   'An expert is a person who has made all the mistakes that can be made in a very narrow field.',
   'One should use common words to say uncommon things',
+  'Do not over or under prepre. Simply be ready.',
 ];

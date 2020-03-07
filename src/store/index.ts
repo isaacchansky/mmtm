@@ -26,6 +26,7 @@ export enum MUT {
   REMOVE_NOTE = 'REMOVE_NOTE',
   SET_DEVICE = 'SET_DEVICE',
   SET_SHOW_NOTES_LIST = 'SET_SHOW_NOTES_LIST',
+  SET_RESOLVED = 'SET_RESOLVED',
 }
 
 export enum ACTIONS {
@@ -63,6 +64,7 @@ const store = new Vuex.Store({
     currentNoteID: '' as string | null,
     device: {} as DeviceInfo,
     showNotesList: true,
+    authResolved: false,
   },
   getters: {
     noteSummaries(state) {
@@ -105,6 +107,9 @@ const store = new Vuex.Store({
     },
     [MUT.REMOVE_NOTE](state, id: string) {
       delete state.notes[id];
+    },
+    [MUT.SET_RESOLVED](state, isResolved: boolean) {
+      Vue.set(state, 'authResolved', isResolved);
     },
   },
   actions: {
@@ -189,6 +194,7 @@ firebase.auth().onAuthStateChanged((user) => {
     store.commit(MUT.SET_CURRENT_USER, user);
     store.dispatch(ACTIONS.FETCH_NOTES);
   }
+  store.commit(MUT.SET_RESOLVED, true);
 });
 
 Plugins.Device.getInfo().then((data) => {

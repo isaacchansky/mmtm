@@ -34,6 +34,7 @@
     </editor-menu-bubble>
     <editor-content class="note__content" :editor="editor" />
     <div class="note__management">
+      <note-tags notes-context :tags="tags" @change="updateTags" />
       <button @click="deleteNote" class="color-warn button">
         Delete <icon-trash />
       </button>
@@ -64,6 +65,7 @@ import { Plugins } from '@capacitor/core';
 import debounce from 'lodash/debounce';
 import { ACTIONS } from '../store';
 import NoteActions from '../components/NoteActions.vue';
+import NoteTags from '../components/NoteTags.vue';
 import IconTrash from '../components/IconTrash.vue';
 import IconBold from '../components/IconBold.vue';
 import IconItalic from '../components/IconItalic.vue';
@@ -76,6 +78,7 @@ export default Vue.extend({
     EditorContent,
     EditorMenuBubble,
     NoteActions,
+    NoteTags,
     IconTrash,
     IconBold,
     IconItalic,
@@ -93,6 +96,7 @@ export default Vue.extend({
       content: '',
       note: {},
       actions: [],
+      tags: [],
       frozen: false,
     };
   },
@@ -110,11 +114,16 @@ export default Vue.extend({
         this.title = this.note.title;
         this.content = this.note.content;
         this.actions = this.note.actions || [];
+        this.tags = this.note.tags || [];
         this.editor.setContent(this.note.content);
       }
     },
     updateActions(actions) {
       this.actions = actions;
+      this.updateNote();
+    },
+    updateTags(tags) {
+      this.tags = tags;
       this.updateNote();
     },
     updateNote: debounce(async function updatenote() {
@@ -131,6 +140,7 @@ export default Vue.extend({
         title: this.title,
         content: this.content,
         actions: this.actions,
+        tags: this.tags,
       });
     }, 500),
     async deleteNote() {
@@ -211,6 +221,9 @@ export default Vue.extend({
 .note__management {
   margin: 2rem 1rem;
   background-color: var(--background-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 .note__content {
   padding: 0 1rem;

@@ -1,6 +1,15 @@
 <template>
   <div class="wrapper">
     <div class="aggregate-actions">
+      <div class="tag-filters" v-if="tags.length">
+        <button class="button"
+          :class="{active: tagFilter === null}"
+          @click="tagFilter = null"> All </button>
+        <button class="button"
+          v-for="t in tags" :key="t"
+          :class="{active: tagFilter === t}"
+          @click="tagFilter = t">{{ t }}</button>
+      </div>
       <template v-for="(n, id) in notes">
         <div class="note-actions" v-if="n.actions && n.actions.length" :key="id">
           <label>
@@ -26,11 +35,34 @@ export default Vue.extend({
     NoteActions,
   },
   data() {
-    return {};
+    return {
+      tagFilter: null,
+    };
   },
   computed: {
     notes() {
+      if (this.tagFilter) {
+        const notes = {};
+        Object.keys(this.$store.state.notes).forEach((noteKey) => {
+          const n = this.$store.state.notes[noteKey];
+          if (n.tags.includes(this.tagFilter)) {
+            notes[noteKey] = n;
+          }
+        });
+        return notes;
+      }
       return this.$store.state.notes;
+    },
+    tags() {
+      const tags = [];
+      Object.values(this.$store.state.notes).forEach((n) => {
+        n.tags.forEach((t) => {
+          if (!tags.includes(t)) {
+            tags.push(t);
+          }
+        });
+      });
+      return tags;
     },
   },
   methods: {
@@ -46,6 +78,9 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.tag-filters {
+  text-align: center;
+}
 .aggregate-actions {
   padding: 0 !important;
 }
@@ -68,4 +103,5 @@ export default Vue.extend({
     padding: 8px 16px;
   }
 }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="{ focus }">
+  <div id="app" :class="{ focus }"  v-if="resolved">
     <div id="nav">
       <div class="nav-section">
         <button class="nav-link-icon" @click="toggleFocus">
@@ -28,6 +28,7 @@
       <router-view/>
     </div>
   </div>
+  <loading-indicator v-else />
 </template>
 <script>
 import Vue from 'vue';
@@ -36,14 +37,16 @@ import { ACTIONS } from './store';
 import IconNotes from './components/IconNotes.vue';
 import IconActions from './components/IconActions.vue';
 import IconSettings from './components/IconSettings.vue';
+import LoadingIndicator from './components/LoadingIndicator.vue';
 
 export default Vue.extend({
   name: 'App',
   components: {
     // IconSync,
-    IconNotes,
     IconActions,
+    IconNotes,
     IconSettings,
+    LoadingIndicator,
   },
   data() {
     return {
@@ -51,6 +54,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    resolved() {
+      return this.$store.state.authResolved;
+    },
     currentUser() {
       return this.$store.state.currentUser;
     },
@@ -176,7 +182,8 @@ a, a:hover, a:focus, a:visited {
   padding: 0.25em 1em;
   margin-bottom: 16px;
 }
-.button:hover, .button:focus {
+.button:hover, .button:focus, .button.active {
+  border-color: var(--text-color-focus);
   background-color: var(--text-color-focus);
   color: var(--background-color);
 }
