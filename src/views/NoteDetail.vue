@@ -98,6 +98,7 @@ export default Vue.extend({
       actions: [],
       tags: [],
       frozen: false,
+      toc: [],
     };
   },
   watch: {
@@ -108,6 +109,8 @@ export default Vue.extend({
     },
   },
   methods: {
+    // setTOC(content) {
+    // },
     setupNote() {
       if (this.id && this.id !== 'new') {
         this.note = this.$store.state.notes[this.id];
@@ -166,7 +169,7 @@ export default Vue.extend({
         new BulletList(),
         new CodeBlock(),
         new HardBreak(),
-        new Heading({ levels: [1, 2, 3] }),
+        new Heading({ levels: [1, 2] }),
         new ListItem(),
         new OrderedList(),
         new TodoItem(),
@@ -180,6 +183,7 @@ export default Vue.extend({
       onUpdate: debounce(({ getJSON }) => {
         this.content = getJSON();
         this.updateNote();
+        // this.setTOC(this.content);
       }, 500),
     });
     this.setupNote();
@@ -243,13 +247,13 @@ export default Vue.extend({
     position: relative;
   }
   .actions {
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: var(--navbar-height);
+    bottom: var(--navbar-height);
     right: 0;
     width: 400px;
-    height: 100%;
     z-index: 2;
-    padding: 50px;
+    padding: 48px 16px 48px 0;
   }
 }
 
@@ -280,5 +284,26 @@ export default Vue.extend({
     opacity: 1;
     visibility: visible;
   }
+}
+
+>>> .ProseMirror pre {
+  background-color: var(--text-color-light);
+  padding: 8px;
+  border-radius: 2px;
+}
+>>> .ProseMirror code {
+  background-color: var(--text-color-light);
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+>>> .ProseMirror p {
+  line-height: 1.4;
+}
+>>> .ProseMirror li p {
+  margin: 0.5em 0;
+}
+>>> .ProseMirror ul,
+>>> .ProseMirror ol {
+  padding-left: 1.75em;
 }
 </style>

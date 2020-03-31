@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="{ focus }"  v-if="resolved">
+  <div id="app" :class="{ focus, max }"  v-if="resolved">
     <div id="nav">
       <div class="nav-section">
         <button class="nav-link-icon" @click="toggleFocus">
@@ -22,6 +22,9 @@
         <router-link class="nav-link-icon" to="/settings">
           <icon-settings />
         </router-link>
+        <button class="nav-link-icon" @click="max = !max">
+          <icon-max />
+        </button>
       </div>
     </div>
     <div id="content">
@@ -33,7 +36,7 @@
 <script>
 import Vue from 'vue';
 import { ACTIONS } from './store';
-// import IconSync from './components/IconSync.vue';
+import IconMax from './components/IconMax.vue';
 import IconNotes from './components/IconNotes.vue';
 import IconActions from './components/IconActions.vue';
 import IconSettings from './components/IconSettings.vue';
@@ -42,7 +45,7 @@ import LoadingIndicator from './components/LoadingIndicator.vue';
 export default Vue.extend({
   name: 'App',
   components: {
-    // IconSync,
+    IconMax,
     IconActions,
     IconNotes,
     IconSettings,
@@ -51,6 +54,7 @@ export default Vue.extend({
   data() {
     return {
       focus: false,
+      max: false,
     };
   },
   computed: {
@@ -206,4 +210,18 @@ a, a:hover, a:focus, a:visited {
   letter-spacing: -0.05em;
   font-size: 12px;
 }
+
+.max .note {
+  padding-right: 0 !important;
+}
+.max .actions {
+  display: none;
+}
+.max .notes__list {
+  display: none !important;
+}
+.max .notes__detail {
+  width: 100vw !important;
+}
+
 </style>
