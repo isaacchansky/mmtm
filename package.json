@@ -14,7 +14,7 @@
     "@capacitor/ios": "^1.5.0",
     "core-js": "^3.6.4",
     "firebase": "^7.9.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "register-service-worker": "^1.6.2",
     "tiptap": "^1.26.6",
     "tiptap-extensions": "^1.28.6",
